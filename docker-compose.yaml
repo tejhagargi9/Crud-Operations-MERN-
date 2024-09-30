@@ -1,0 +1,35 @@
+version: '3'
+services:
+  frontend:
+    build: CRUD/frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - crud
+
+  backend:
+    build: CRUD/backend
+    ports:
+      - "3001:3001"
+    networks:
+      - crud
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - crud
+
+# The networks and volumes definitions should be outside the services block
+networks:
+  crud:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
